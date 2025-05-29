@@ -24,7 +24,7 @@ const StockDataForm = ({ onDataFetched }) => {
   const toast = useToast();
 
   const fetchStockData = async (formData) => {
-    const response = await axios.post('https://localhost:8000/api/stock-data', {
+    const response = await axios.post('http://localhost:8000/api/stock-data', {
       symbols: formData.symbols,
       startDate: formData.startDate,
       endDate: formData.endDate
