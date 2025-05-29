@@ -24,12 +24,16 @@ const StockDataForm = ({ onDataFetched }) => {
   const toast = useToast();
 
   const fetchStockData = async (formData) => {
-    const response = await axios.post('http://localhost:8000/api/stock-data', {
-      symbols: formData.symbols,
-      startDate: formData.startDate,
-      endDate: formData.endDate
-    });
-    return response.data;
+    try {
+      const response = await axios.post('http://localhost:8000/api/stock-data', {
+        symbols: formData.symbols,
+        startDate: formData.startDate,
+        endDate: formData.endDate
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.detail || 'Failed to fetch stock data');
+    }
   };
 
   const mutation = useMutation(fetchStockData, {
