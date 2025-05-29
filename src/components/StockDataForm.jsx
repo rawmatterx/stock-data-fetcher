@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { useMutation } from 'react-query';
 import { format } from 'date-fns';
+import axios from 'axios';
 
 const StockDataForm = ({ onDataFetched }) => {
   const [symbols, setSymbols] = useState('');
@@ -23,24 +24,12 @@ const StockDataForm = ({ onDataFetched }) => {
   const toast = useToast();
 
   const fetchStockData = async (formData) => {
-    // This is where we'd normally make an API call
-    // For now, we'll simulate the API response
-    const symbolList = formData.symbols.split('\n').map(s => s.trim()).filter(Boolean);
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Mock data structure
-    return {
-      data: symbolList.map(symbol => ({
-        symbol,
-        dates: [...Array(10)].map((_, i) => ({
-          date: new Date(Date.now() - i * 24 * 60 * 60 * 1000),
-          close: Math.random() * 1000,
-          volume: Math.floor(Math.random() * 1000000)
-        }))
-      }))
-    };
+    const response = await axios.post('http://localhost:8000/api/stock-data', {
+      symbols: formData.symbols,
+      startDate: formData.startDate,
+      endDate: formData.endDate
+    });
+    return response.data;
   };
 
   const mutation = useMutation(fetchStockData, {
